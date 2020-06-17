@@ -11,7 +11,7 @@ class App extends Component {
   constructor(){
     super();
     this.state = {
-      city:"",
+      city:"Pune",
       temp: undefined,
       max: undefined,
       min: undefined,
@@ -26,7 +26,6 @@ class App extends Component {
       )
       .then((response) => {
         let data = response.data;
-        console.log(this.state);
         this.setState({
           city: data.name,
           temp: Math.floor(data.main.temp - 273.15),
@@ -50,7 +49,6 @@ class App extends Component {
 
   onCityChange(city){
     this.setState({city:city});
-    console.log(this.state.city);
     this.updateWeatherData(city);
   }
 
@@ -61,7 +59,6 @@ class App extends Component {
         <Card
           state={this.state}
           handleCityChange={(city) => {
-            console.log(city)
             this.onCityChange(city);
           }}
         ></Card>

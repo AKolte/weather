@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Jumbotron} from 'react-bootstrap';
-import { FormGroup, FormControl, Button, Form, Row } from "react-bootstrap";
+import {  FormControl, Button, Form, Row } from "react-bootstrap";
 
 class Card extends Component {
     
@@ -13,7 +13,6 @@ class Card extends Component {
     
     setCityText=(evt)=>{
         this.setState({city:evt.target.value})
-        console.log(this.state.city)
     }
 
     render() { 
@@ -29,11 +28,15 @@ class Card extends Component {
                     type="input"
                     placeholder="Search for a city"
                     onChange={this.setCityText}
+                    value={this.state.city}
                   />
 
                   <Button
                     bsStyle="primary"
-                    onClick={() => this.props.handleCityChange(this.state.city)}
+                    onClick={() => {
+                     this.props.handleCityChange(this.state.city);
+                     this.setState({city:""});
+                    }}
                   >
                     Search
                   </Button>
@@ -45,6 +48,7 @@ class Card extends Component {
 
             <img
               src={`http://openweathermap.org/img/wn/${this.props.state.iconId}@2x.png`}
+              alt={this.state.description}
             ></img>
             <h1>{this.props.state.temp}&deg;C </h1>
             <h4>
