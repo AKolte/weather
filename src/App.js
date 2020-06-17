@@ -1,26 +1,73 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import Card from './components/Card';
+import Search from './components/Search';
+import axios from 'axios';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = { 
+    
+   }
+  constructor(){
+    super();
+    this.state = {
+      city:"",
+      temp: undefined,
+      max: undefined,
+      min: undefined,
+      description:""
+    };
+  }
+
+  updateWeatherData(city){
+    axios
+      .get(
+        `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=67cc74cb53c23e2a0ffbdb4a3a82d610`
+      )
+      .then((response) => {
+        let data = response.data;
+        console.log(this.state);
+        this.setState({
+          city: data.name,
+          temp: Math.floor(data.main.temp - 273.15),
+          max: Math.floor(data.main.temp_max - 273.15),
+          min: Math.floor(data.main.temp_min - 273.15),
+          description: data.weather[0].description,
+          iconId: data.weather[0].icon,
+        });
+        console.log(this.state);
+      })
+      .catch((error) => console.log(error))
+      .finally();
+
+  }
+
+  componentDidMount(){
+    this.updateWeatherData("Pune");
+      
+  }
+
+
+  onCityChange(city){
+    this.setState({city:city});
+    console.log(this.state.city);
+    this.updateWeatherData(city);
+  }
+
+  render() { 
+    return (
+      <div className="App">
+        <Search></Search>
+        <Card
+          state={this.state}
+          handleCityChange={(city) => {
+            console.log(city)
+            this.onCityChange(city);
+          }}
+        ></Card>
+      </div>
+    );
+  }
 }
-
+ 
 export default App;
